@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparer les Véhicules - AutoMarket</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">🚗</span>
+                <span>AutoMarket</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="../index.html">Accueil</a></li>
+                <li><a href="Catalogue.html">Catalogue</a></li>
+                <li><a href="profile.html">Mon Compte</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="section-title">Comparer les véhicules</h1>
+            
+            <div id="comparison-container">
+                <div class="loading">Chargement de la comparaison...</div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <button onclick="clearAllComparison()" class="btn btn-danger">Effacer la comparaison</button>
+                <a href="Catalogue.html" class="btn btn-outline">Retour au catalogue</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 AutoMarket. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        const comparisonList = JSON.parse(localStorage.getItem('comparison')) || [];
+        
+        if (comparisonList.length === 0) {
+            document.getElementById('comparison-container').innerHTML = 
+                '<div class="alert alert-info">Aucun véhicule à comparer. <a href="Catalogue.html">Parcourir le catalogue</a></div>';
+        } else {
+            loadComparison();
+        }
+        
+        function loadComparison() {
+            const promises = comparisonList.map(id => 
+                fetch(`../php/get_vehicles.php?id=${id}`).then(r => r.json())
+            );
+            
+            Promise.all(promises)
+                .then(results => {
+                    const vehicles = results.filter(r => r.success).map(r => r.vehicle);
+                    displayComparison(vehicles);
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    document.getElementById('comparison-container').innerHTML = 
+                        '<div class="alert alert-error">Erreur lors du chargement de la comparaison.</div>';
+                });
+        }
+        
+        function displayComparison(vehicles) {
+            const container = document.getElementById('comparison-container');
+            
+            container.innerHTML = `
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden;">
+                        <thead>
+                            <tr style="background: var(--light-color);">
+                                <th style="padding: 1rem; text-align: left;">Caractéristique</th>
+                                ${vehicles.map(v => `
+                                    <th style="padding: 1rem; text-align: center; min-width: 200px;">
+                                        <img src="${v.image_principale || '../images/default-car.jpg'}" 
+                                             style="width: 100%; height: 150px; object-fit: cover; border-radius: 5px; margin-bottom: 0.5rem;">
+                                        <strong>${v.marque} ${v.modele}</strong>
+                                        <button onclick="vehicleApp.removeFromComparison(${v.id})" 
+                                                style="display: block; margin: 0.5rem auto; padding: 0.3rem 0.8rem; background: var(--danger-color); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                            Retirer
+                                        </button>
+                                    </th>
+                                `).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${createComparisonRow('Prix', vehicles.map(v => 
+                                v.disponible_vente ? vehicleApp.formatPrice(v.prix_vente) : 
+                                (v.disponible_location ? vehicleApp.formatPrice(v.prix_location_jour) + '/jour' : 'N/A')
+                            ))}
+                            ${createComparisonRow('Année', vehicles.map(v => v.annee))}
+                            ${createComparisonRow('Kilométrage', vehicles.map(v => v.kilometrage.toLocaleString() + ' km'))}
+                            ${createComparisonRow('Couleur', vehicles.map(v => v.couleur))}
+                            ${createComparisonRow('Vitesse max', vehicles.map(v => v.vitesse_max + ' km/h'))}
+                            ${createComparisonRow('Consommation', vehicles.map(v => v.consommation + ' L/100km'))}
+                            ${createComparisonRow('Type carburant', vehicles.map(v => v.type_consommation))}
+                            ${createComparisonRow('Disponibilité', vehicles.map(v => {
+                                let badges = [];
+                                if (v.disponible_vente) badges.push('Vente');
+                                if (v.disponible_location) badges.push('Location');
+                                return badges.join(', ') || 'N/A';
+                            }))}
+                            <tr>
+                                <td style="padding: 1rem; background: var(--light-color);"><strong>Actions</strong></td>
+                                ${vehicles.map(v => `
+                                    <td style="padding: 1rem; text-align: center;">
+                                        <a href="detailCar.html?id=${v.id}" class="btn btn-primary" style="display: block; margin-bottom: 0.5rem;">
+                                            Voir détails
+                                        </a>
+                                    </td>
+                                `).join('')}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+        
+        function createComparisonRow(label, values) {
+            return `
+                <tr>
+                    <td style="padding: 1rem; background: var(--light-color);"><strong>${label}</strong></td>
+                    ${values.map(v => `<td style="padding: 1rem; text-align: center; border-bottom: 1px solid var(--border-color);">${v}</td>`).join('')}
+                </tr>
+            `;
+        }
+        
+        function clearAllComparison() {
+            if (confirm('Êtes-vous sûr de vouloir effacer toute la comparaison ?')) {
+                localStorage.removeItem('comparison');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

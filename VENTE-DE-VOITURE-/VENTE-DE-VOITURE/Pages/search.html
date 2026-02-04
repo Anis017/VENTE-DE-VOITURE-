@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche - AutoMarket</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">🚗</span>
+                <span>AutoMarket</span>
+            </a>
+            
+            <div class="search-box-nav">
+                <form action="search.html" method="GET">
+                    <input type="text" name="q" id="search-input" placeholder="Rechercher...">
+                    <button type="submit">🔍</button>
+                </form>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="../index.html">Accueil</a></li>
+                <li><a href="Catalogue.html">Catalogue</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="section-title">Résultats de recherche</h1>
+            <p id="search-query"></p>
+            
+            <div class="vehicles-grid" id="search-results">
+                <div class="loading">Recherche en cours...</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 AutoMarket. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get('q') || '';
+        
+        document.getElementById('search-input').value = searchQuery;
+        document.getElementById('search-query').textContent = `Recherche pour: "${searchQuery}"`;
+        
+        fetch(`../php/get_vehicles.php?search=${encodeURIComponent(searchQuery)}`)
+            .then(response => response.json())
+            .then(data => {
+                const grid = document.getElementById('search-results');
+                
+                if (data.success && data.vehicles.length > 0) {
+                    grid.innerHTML = '';
+                    data.vehicles.forEach(vehicle => {
+                        const card = createVehicleCard(vehicle);
+                        grid.appendChild(card);
+                    });
+                } else {
+                    grid.innerHTML = '<p class="text-center">Aucun résultat trouvé.</p>';
+                }
+            });
+        
+        function createVehicleCard(vehicle) {
+            const card = document.createElement('div');
+            card.className = 'vehicle-card';
+            card.onclick = () => window.location.href = `detailCar.html?id=${vehicle.id}`;
+            
+            const price = vehicle.disponible_vente ? 
+                vehicleApp.formatPrice(vehicle.prix_vente) : 
+                vehicleApp.formatPrice(vehicle.prix_location_jour) + '/jour';
+            
+            card.innerHTML = `
+                <img src="${vehicle.image_principale || '../images/default-car.jpg'}" class="vehicle-image">
+                <div class="vehicle-info">
+                    <div class="vehicle-brand">${vehicle.marque}</div>
+                    <h3 class="vehicle-model">${vehicle.modele}</h3>
+                    <div class="vehicle-price">${price}</div>
+                    <div class="vehicle-details">
+                        <span>📅 ${vehicle.annee}</span>
+                        <span>🛣️ ${vehicle.kilometrage.toLocaleString()} km</span>
+                    </div>
+                    <div class="vehicle-badges">
+                        ${vehicle.disponible_vente ? '<span class="badge badge-sale">À vendre</span>' : ''}
+                        ${vehicle.disponible_location ? '<span class="badge badge-rent">Location</span>' : ''}
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+    </script>
+</body>
+</html>

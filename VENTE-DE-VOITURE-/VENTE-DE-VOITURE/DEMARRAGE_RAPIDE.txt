@@ -1,0 +1,21 @@
+=== DÉMARRAGE RAPIDE AUTOMARKET ===
+
+1. Démarrer Apache et MySQL (via XAMPP/WAMP)
+
+2. Importer database.sql dans phpMyAdmin
+
+3. Ouvrir: http://localhost/VENTE-DE-VOITURE/
+
+4. Se connecter avec:
+   - Email: jean.dupont@email.com
+   - Mot de passe: password123
+
+5. Explorer:
+   ✓ Catalogue complet
+   ✓ Recherche et filtres
+   ✓ Comparaison de véhicules
+   ✓ Ajout d'annonces (vendeur)
+   ✓ Système de favoris
+   ✓ Achat et location
+
+Bon test !

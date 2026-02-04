@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoMarket - Achat et Location de Véhicules</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Barre de navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🚗</span>
+                <span>AutoMarket</span>
+            </a>
+            
+            <div class="search-box-nav">
+                <form action="Pages/search.html" method="GET">
+                    <input type="text" name="q" placeholder="Rechercher une marque, modèle...">
+                    <button type="submit">🔍</button>
+                </form>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="Pages/Catalogue.html">Catalogue</a></li>
+                <li><a href="Pages/vente.html">Vendre/Louer</a></li>
+                <li><a href="Pages/profile.html">Mon Compte</a></li>
+                <li><a href="Pages/login.html" class="btn-primary">Connexion</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Trouvez votre véhicule idéal</h1>
+                <p>Des milliers de véhicules neufs et d'occasion à vendre ou à louer</p>
+                
+                <div class="hero-search">
+                    <form action="Pages/Catalogue.html" method="GET">
+                        <input type="text" name="search" placeholder="Rechercher par marque, modèle, type...">
+                        <button type="submit">Rechercher</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Véhicules en vedette -->
+        <section class="container">
+            <h2 class="section-title">Véhicules en vedette</h2>
+            
+            <div class="vehicles-grid" id="featured-vehicles">
+                <!-- Les véhicules seront chargés dynamiquement -->
+                <div class="loading">Chargement des véhicules...</div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="Pages/Catalogue.html" class="btn btn-primary">Voir tous les véhicules</a>
+            </div>
+        </section>
+
+        <!-- Section Catégories -->
+        <section class="container">
+            <h2 class="section-title">Parcourir par catégorie</h2>
+            
+            <div class="vehicles-grid">
+                <a href="Pages/Catalogue.html?type=citadine" class="vehicle-card">
+                    <div style="padding: 3rem; text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🚙</div>
+                        <h3 style="color: white;">Citadines</h3>
+                        <p style="color: rgba(255,255,255,0.9);">Parfaites pour la ville</p>
+                    </div>
+                </a>
+                
+                <a href="Pages/Catalogue.html?type=suv" class="vehicle-card">
+                    <div style="padding: 3rem; text-align: center; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🚐</div>
+                        <h3 style="color: white;">SUV</h3>
+                        <p style="color: rgba(255,255,255,0.9);">Espace et confort</p>
+                    </div>
+                </a>
+                
+                <a href="Pages/Catalogue.html?type=sportive" class="vehicle-card">
+                    <div style="padding: 3rem; text-align: center; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🏎️</div>
+                        <h3 style="color: white;">Sportives</h3>
+                        <p style="color: rgba(255,255,255,0.9);">Performance maximale</p>
+                    </div>
+                </a>
+                
+                <a href="Pages/Catalogue.html?type_consommation=electrique" class="vehicle-card">
+                    <div style="padding: 3rem; text-align: center; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">⚡</div>
+                        <h3 style="color: white;">Électriques</h3>
+                        <p style="color: rgba(255,255,255,0.9);">Éco-responsables</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Section Avantages -->
+        <section class="container">
+            <h2 class="section-title">Pourquoi choisir AutoMarket ?</h2>
+            
+            <div class="vehicles-grid">
+                <div class="card">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                        <h3>Véhicules vérifiés</h3>
+                        <p style="color: #6b7280;">Tous nos véhicules sont contrôlés et certifiés</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">💰</div>
+                        <h3>Meilleurs prix</h3>
+                        <p style="color: #6b7280;">Prix compétitifs et transparents</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🔒</div>
+                        <h3>Paiement sécurisé</h3>
+                        <p style="color: #6b7280;">Transactions 100% sécurisées</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🤝</div>
+                        <h3>Support client</h3>
+                        <p style="color: #6b7280;">Équipe disponible 7j/7</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <h3>AutoMarket</h3>
+                <p>Votre plateforme de confiance pour l'achat et la location de véhicules.</p>
+            </div>
+            
+            <div>
+                <h3>Liens rapides</h3>
+                <ul>
+                    <li><a href="Pages/Catalogue.html">Catalogue</a></li>
+                    <li><a href="Pages/vente.html">Vendre un véhicule</a></li>
+                    <li><a href="Pages/location.html">Louer un véhicule</a></li>
+                    <li><a href="Pages/Contact.html">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3>Aide</h3>
+                <ul>
+                    <li><a href="Pages/fonc.html">Comment ça marche</a></li>
+                    <li><a href="Pages/Avis.html">Avis clients</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Mentions légales</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3>Contact</h3>
+                <ul>
+                    <li>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="abc8c4c5dfcac8dfebcadedfc4c6cad9c0cedf85cdd9">[email&#160;protected]</a></li>
+                    <li>📞 01 23 45 67 89</li>
+                    <li>📍 Paris, France</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 AutoMarket. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.js"></script>
+    <script>
+        // Charger les véhicules en vedette
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('php/get_vehicles.php?featured=true&limit=6')
+                .then(response => response.json())
+                .then(data => {
+                    const grid = document.getElementById('featured-vehicles');
+                    
+                    if (data.success && data.vehicles.length > 0) {
+                        grid.innerHTML = '';
+                        
+                        data.vehicles.forEach(vehicle => {
+                            const card = createVehicleCard(vehicle);
+                            grid.appendChild(card);
+                        });
+                    } else {
+                        grid.innerHTML = '<p class="text-center">Aucun véhicule disponible pour le moment.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    document.getElementById('featured-vehicles').innerHTML = 
+                        '<p class="text-center">Erreur lors du chargement des véhicules.</p>';
+                });
+        });
+        
+        function createVehicleCard(vehicle) {
+            const card = document.createElement('div');
+            card.className = 'vehicle-card';
+            card.dataset.brand = vehicle.marque;
+            card.dataset.model = vehicle.modele;
+            card.dataset.price = vehicle.prix_vente || vehicle.prix_location_jour;
+            card.dataset.km = vehicle.kilometrage;
+            card.dataset.year = vehicle.annee;
+            card.onclick = () => window.location.href = `Pages/detailCar.html?id=${vehicle.id}`;
+            
+            const imageUrl = vehicle.image_principale || 'images/default-car.jpg';
+            const price = vehicle.disponible_vente ? 
+                vehicleApp.formatPrice(vehicle.prix_vente) : 
+                vehicleApp.formatPrice(vehicle.prix_location_jour) + '/jour';
+            
+            card.innerHTML = `
+                <img src="${imageUrl}" alt="${vehicle.marque} ${vehicle.modele}" class="vehicle-image">
+                <div class="vehicle-info">
+                    <div class="vehicle-brand">${vehicle.marque}</div>
+                    <h3 class="vehicle-model">${vehicle.modele}</h3>
+                    <div class="vehicle-price">${price}</div>
+                    <div class="vehicle-details">
+                        <span>📅 ${vehicle.annee}</span>
+                        <span>🛣️ ${vehicle.kilometrage.toLocaleString()} km</span>
+                        <span>⛽ ${vehicle.consommation} L/100km</span>
+                    </div>
+                    <div class="vehicle-badges">
+                        ${vehicle.disponible_vente ? '<span class="badge badge-sale">À vendre</span>' : ''}
+                      

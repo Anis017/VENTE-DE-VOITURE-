@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement - AutoMarket</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">🚗</span>
+                <span>AutoMarket</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="section-title">Finaliser l'achat</h1>
+            
+            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem;">
+                <div class="card">
+                    <h2>Informations de paiement</h2>
+                    <form id="payment-form">
+                        <h3 style="margin-top: 2rem;">Carte bancaire</h3>
+                        <div class="form-group">
+                            <label>Numéro de carte *</label>
+                            <input type="text" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date d'expiration *</label>
+                                <input type="text" class="form-control" placeholder="MM/AA" maxlength="5" required>
+                            </div>
+                            <div class="form-group">
+                                <label>CVV *</label>
+                                <input type="text" class="form-control" placeholder="123" maxlength="3" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Nom sur la carte *</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        
+                        <h3 style="margin-top: 2rem;">Adresse de facturation</h3>
+                        <div class="form-group">
+                            <label>Adresse *</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Code postal *</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Ville *</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                                <input type="checkbox" required style="width: auto;">
+                                J'accepte les <a href="#">conditions générales de vente</a>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">Confirmer le paiement</button>
+                    </form>
+                </div>
+                
+                <div>
+                    <div class="card">
+                        <h3>Récapitulatif</h3>
+                        <div id="order-summary" class="loading">Chargement...</div>
+                    </div>
+                    
+                    <div class="card mt-2" style="background: #f0f9ff; border: 2px solid #3b82f6;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 3rem;">🔒</div>
+                            <p><strong>Paiement 100% sécurisé</strong></p>
+                            <p style="font-size: 0.9rem; color: var(--text-light);">Vos données sont protégées</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const vehicleId = urlParams.get('id');
+        
+        fetch(`../php/get_vehicles.php?id=${vehicleId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const vehicle = data.vehicle;
+                    const price = vehicle.prix_vente;
+                    const tva = price * 0.2;
+                    const total = price + tva;
+                    
+                    document.getElementById('order-summary').innerHTML = `
+                        <img src="${vehicle.image_principale || '../images/default-car.jpg'}" 
+                             style="width: 100%; border-radius: 10px; margin-bottom: 1rem;">
+                        <h3>${vehicle.marque} ${vehicle.modele}</h3>
+                        <p>${vehicle.annee} • ${vehicle.kilometrage.toLocaleString()} km</p>
+                        <hr style="margin: 1.5rem 0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Prix du véhicule:</span>
+                            <strong>${vehicleApp.formatPrice(price)}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>TVA (20%):</span>
+                            <strong>${vehicleApp.formatPrice(tva)}</strong>
+                        </div>
+                        <hr style="margin: 1rem 0;">
+                        <div style="display: flex; justify-content: space-between; font-size: 1.3rem;">
+                            <span><strong>Total:</strong></span>
+                            <strong style="color: var(--primary-color);">${vehicleApp.formatPrice(total)}</strong>
+                        </div>
+                    `;
+                }
+            });
+        
+        document.getElementById('payment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (confirm('Confirmer le paiement ?')) {
+                window.location.href = 'venteConfirme.html?id=' + vehicleId;
+            }
+        });
+    </script>
+</body>
+</html>

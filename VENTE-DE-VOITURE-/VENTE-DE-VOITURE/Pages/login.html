@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - AutoMarket</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .auth-container {
+            max-width: 450px;
+            margin: 5rem auto;
+            padding: 2rem;
+        }
+        
+        .auth-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">🚗</span>
+                <span>AutoMarket</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="../index.html">Accueil</a></li>
+                <li><a href="Catalogue.html">Catalogue</a></li>
+                <li><a href="register.html">S'inscrire</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1>Connexion</h1>
+                    <p>Connectez-vous à votre compte AutoMarket</p>
+                </div>
+                
+                <div id="messages"></div>
+                
+                <form action="../php/auth.php" method="POST" id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Mot de passe *</label>
+                        <input type="password" id="password" name="password" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                            <input type="checkbox" name="remember" style="width: auto;">
+                            Se souvenir de moi
+                        </label>
+                    </div>
+                    
+                    <button type="submit" name="login" class="btn btn-primary btn-block">
+                        Se connecter
+                    </button>
+                </form>
+                
+                <div class="auth-divider">
+                    <p><a href="passwordchange.html">Mot de passe oublié ?</a></p>
+                </div>
+                
+                <div class="text-center">
+                    <p>Pas encore de compte ? <a href="register.html"><strong>S'inscrire</strong></a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 AutoMarket. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Afficher les messages d'erreur ou de succès
+        const urlParams = new URLSearchParams(window.location.search);
+        const messagesDiv = document.getElementById('messages');
+        
+        if (urlParams.has('error')) {
+            const errorMsg = urlParams.get('error');
+            messagesDiv.innerHTML = `<div class="alert alert-error">${errorMsg}</div>`;
+        }
+        
+        if (urlParams.has('success')) {
+            const successMsg = urlParams.get('success');
+            messagesDiv.innerHTML = `<div class="alert alert-success">${successMsg}</div>`;
+        }
+        
+        // Validation du formulaire
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                e.preventDefault();
+                vehicleApp.showAlert('Veuillez remplir tous les champs', 'error');
+                return false;
+            }
+            
+            if (!email.includes('@')) {
+                e.preventDefault();
+                vehicleApp.showAlert('Email invalide', 'error');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

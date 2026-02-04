@@ -1,0 +1,69 @@
+=======================================================
+GUIDE D'INSTALLATION - AUTOMARKET
+Plateforme de Vente et Location de Véhicules
+=======================================================
+
+ÉTAPE 1: PRÉREQUIS
+------------------
+- XAMPP, WAMP ou MAMP installé
+- PHP 7.4 ou supérieur
+- MySQL 5.7 ou supérieur
+- Navigateur web moderne
+
+ÉTAPE 2: INSTALLATION
+--------------------
+1. Copier le dossier VENTE-DE-VOITURE dans:
+   - XAMPP: C:/xampp/htdocs/
+   - WAMP: C:/wamp64/www/
+   - MAMP: /Applications/MAMP/htdocs/
+
+2. Démarrer Apache et MySQL
+
+3. Ouvrir phpMyAdmin: http://localhost/phpmyadmin
+
+4. Créer la base de données:
+   - Nom: location_achat_vehicules
+   - Collation: utf8mb4_unicode_ci
+
+5. Importer database.sql:
+   - Cliquer sur "Importer"
+   - Sélectionner le fichier database.sql
+   - Cliquer sur "Exécuter"
+
+6. Vérifier la configuration dans php/config.php:
+   - DB_HOST: localhost
+   - DB_NAME: location_achat_vehicules
+   - DB_USER: root
+   - DB_PASS: (vide par défaut)
+
+7. Créer le dossier pour les uploads (si nécessaire):
+   - images/vehicles/
+   - Donner les permissions d'écriture
+
+ÉTAPE 3: ACCÈS
+--------------
+Ouvrir dans le navigateur:
+http://localhost/VENTE-DE-VOITURE/
+
+COMPTES DE TEST
+---------------
+Vendeur:
+- Email: jean.dupont@email.com
+- Mot de passe: password123
+
+Client:
+- Email: sophie.martin@email.com
+- Mot de passe: password123
+
+DÉPANNAGE
+---------
+- Erreur de connexion BDD: Vérifier config.php
+- Images non uploadées: Vérifier permissions dossier images/
+- Page blanche: Activer l'affichage des erreurs PHP
+- 404 Not Found: Vérifier l'URL et le chemin du projet
+
+SUPPORT
+-------
+Consultez le fichier README.md pour plus de détails.
+
+=======================================================

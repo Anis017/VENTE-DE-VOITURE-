@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - AutoMarket</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">🚗</span>
+                <span>AutoMarket</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="../index.html">Accueil</a></li>
+                <li><a href="Catalogue.html">Catalogue</a></li>
+                <li><a href="Contact.html" class="active">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="section-title">Contactez-nous</h1>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div class="card">
+                    <h2>Envoyez-nous un message</h2>
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="name">Nom complet *</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Téléphone</label>
+                            <input type="tel" id="phone" name="phone" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject">Sujet *</label>
+                            <select id="subject" name="subject" class="form-control" required>
+                                <option value="">Sélectionnez un sujet</option>
+                                <option value="info">Demande d'information</option>
+                                <option value="vehicle">Question sur un véhicule</option>
+                                <option value="technical">Problème technique</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" class="form-control" rows="6" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">Envoyer le message</button>
+                    </form>
+                </div>
+                
+                <div>
+                    <div class="card">
+                        <h3>Nos coordonnées</h3>
+                        <div style="margin: 2rem 0;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                <span style="font-size: 2rem;">📧</span>
+                                <div>
+                                    <strong>Email</strong>
+                                    <p style="margin: 0; color: var(--text-light);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="accfc3c2d8cdcfd8eccdd9d8c3c1cddec7c9d882cade">[email&#160;protected]</a></p>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                <span style="font-size: 2rem;">📞</span>
+                                <div>
+                                    <strong>Téléphone</strong>
+                                    <p style="margin: 0; color: var(--text-light);">01 23 45 67 89</p>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                <span style="font-size: 2rem;">📍</span>
+                                <div>
+                                    <strong>Adresse</strong>
+                                    <p style="margin: 0; color: var(--text-light);">123 Avenue des Champs-Élysées<br>75008 Paris, France</p>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <span style="font-size: 2rem;">🕒</span>
+                                <div>
+                                    <strong>Horaires</strong>
+                                    <p style="margin: 0; color: var(--text-light);">Lun-Ven: 9h-18h<br>Sam: 10h-16h<br>Dim: Fermé</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-2">
+                        <h3>FAQ Rapide</h3>
+                        <div style="margin-top: 1rem;">
+                            <details style="margin-bottom: 1rem;">
+                                <summary style="cursor: pointer; font-weight: 600; padding: 0.5rem;">Comment vendre mon véhicule ?</summary>
+                                <p style="margin-top: 0.5rem; padding-left: 1rem; color: var(--text-light);">
+                                    Inscrivez-vous en tant que vendeur, puis créez une annonce en remplissant le formulaire avec les détails de votre véhicule.
+                                </p>
+                            </details>
+                            
+                            <details style="margin-bottom: 1rem;">
+                                <summary style="cursor: pointer; font-weight: 600; padding: 0.5rem;">Les véhicules sont-ils vérifiés ?</summary>
+                                <p style="margin-top: 0.5rem; padding-left: 1rem; color: var(--text-light);">
+                                    Oui, nous vérifions chaque véhicule avant publication de l'annonce.
+                                </p>
+                            </details>
+                            
+                            <details>
+                                <summary style="cursor: pointer; font-weight: 600; padding: 0.5rem;">Puis-je essayer le véhicule avant achat ?</summary>
+                                <p style="margin-top: 0.5rem; padding-left: 1rem; color: var(--text-light);">
+                                    Oui, contactez directement le vendeur pour organiser un essai.
+                                </p>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 AutoMarket. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="../js/main.js"></script>
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDef

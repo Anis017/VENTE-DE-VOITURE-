@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails du véhicule - AutoMarket</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">🚗</span>
+                <span>AutoMarket</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="../index.html">Accueil</a></li>
+                <li><a href="Catalogue.html">Catalogue</a></li>
+                <li><a href="profile.html">Mon Compte</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <a href="Catalogue.html" style="display: inline-block; margin-bottom: 1rem;">← Retour au catalogue</a>
+            
+            <div id="vehicle-detail">
+                <div class="loading">Chargement...</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 AutoMarket. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Récupérer l'ID du véhicule depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const vehicleId = urlParams.get('id');
+        
+        if (!vehicleId) {
+            window.location.href = 'Catalogue.html';
+        }
+        
+        // Charger les détails du véhicule
+        fetch(`../php/get_vehicles.php?id=${vehicleId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.vehicle) {
+                    displayVehicleDetails(data.vehicle);
+                } else {
+                    document.getElementById('vehicle-detail').innerHTML = 
+                        '<div class="alert alert-error">Véhicule non trouvé.</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                document.getElementById('vehicle-detail').innerHTML = 
+                    '<div class="alert alert-error">Erreur lors du chargement du véhicule.</div>';
+            });
+        
+        function displayVehicleDetails(vehicle) {
+            const container = document.getElementById('vehicle-detail');
+            const imageUrl = vehicle.image_principale || '../images/default-car.jpg';
+            
+            container.innerHTML = `
+                <h1 style="margin-bottom: 2rem;">${vehicle.marque} ${vehicle.modele}</h1>
+                
+                <div class="detail-container">
+                    <div class="detail-image">
+                        <img src="${imageUrl}" alt="${vehicle.marque} ${vehicle.modele}">
+                    </div>
+                    
+                    <div class="detail-info">
+                        <div class="vehicle-badges" style="margin-bottom: 1rem;">
+                            ${vehicle.disponible_vente ? '<span class="badge badge-sale">À vendre</span>' : ''}
+                            ${vehicle.disponible_location ? '<span class="badge badge-rent">Location disponible</span>' : ''}
+                        </div>
+                        
+                        ${vehicle.disponible_vente ? `
+                            <div style="margin-bottom: 2rem;">
+                                <h2 style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 0.5rem;">
+                                    ${vehicleApp.formatPrice(vehicle.prix_vente)}
+                                </h2>
+                                <p style="color: var(--text-light);">Prix de vente</p>
+                            </div>
+                        ` : ''}
+                        
+                        ${vehicle.disponible_location ? `
+                            <div style="margin-bottom: 2rem; padding: 1.5rem; background: var(--light-color); border-radius: 10px;">
+                                <h3 style="margin-bottom: 1rem;">Location</h3>
+                                <p style="font-size: 1.5rem; color: var(--primary-color); font-weight: bold;">
+                                    ${vehicleApp.formatPrice(vehicle.prix_location_jour)} / jour
+                                </p>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="specs-grid">
+                            <div class="spec-item">
+                                <div class="spec-label">Année</div>
+                                <div class="spec-value">${vehicle.annee}</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-label">Kilométrage</div>
+                                <div class="spec-value">${vehicle.kilometrage.toLocaleString()} km</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-label">Couleur</div>
+                                <div class="spec-value">${vehicle.couleur}</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-label">Vitesse max</div>
+                                <div class="spec-value">${vehicle.vitesse_max} km/h</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-label">Consommation</div>
+                                <div class="spec-value">${vehicle.consommation} L/100km</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-label">Type de carburant</div>
+                                <div class="spec-value" style="text-transform: capitalize;">${vehicle.type_consommation}</div>
+                            </div>
+                        </div>
+                        
+                        ${vehicle.disponible_vente ? `
+                            <button onclick="buyVehicle(${vehicle.id})" class="btn btn-primary btn-block mt-3">
+                                Acheter ce véhicule
+                            </button>
+                        ` : ''}
+                        
+                        ${vehicle.disponible_location ? `
+                            <button onclick="rentVehicle(${vehicle.id})" class="btn btn-secondary btn-block mt-2">
+                                Réserver pour une location
+                            </button>
+                        ` : ''}
+                        
+                        <button onclick="vehicleApp.addToComparison(${vehicle.id})" class="btn btn-outline btn-block mt-2">
+                            Ajouter à la comparaison
+                        </button>
+                        
+                        <button onclick="vehicleApp.toggleFavorite(${vehicle.id})" class="btn btn-outline btn-block mt-2">
+                            ❤️ Ajouter aux favoris
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <h3>Description</h3>
+                    <p style="line-height: 1.8;">${vehicle.description || 'Aucune description disponible.'}</p>
+                </div>
+                
+                <div class="card mt-4">
+                    <h3>Informations du vendeur</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div>
+                            <strong>Nom:</strong> ${vehicle.vendeur_prenom} ${vehicle.vendeur_nom}
+                        </div>
+                        <div>
+                            <strong>Email:</strong> ${vehicle.vendeur_email}
+                        </div>
+                        <div>
+                            <strong>Téléphone:</strong> ${vehicle.vendeur_telephone || 'Non renseigné'}
+                        </div>
+                    </div>
+                    <button onclick="contactSeller(${vehicle.id})" class="btn btn-primary mt-2">
+                        Contacter le vendeur
+                    </button>
+                </div>
+            `;
+        }
+        
+        function buyVehicle(vehicleId) {
+            // Vérifier si l'utilisateur est connecté
+            if (!isUserLoggedIn()) {
+                if (confirm('Vous devez être connecté pour acheter un véhicule. Voulez-vous vous connecter maintenant ?')) {
+                    window.location.href = 'login.html';
+                }
+                return;
+            }
+            
+            // Rediriger vers la page d'achat
+            window.location.href = `paiement.html?id=${vehicleId}&type=achat`;
+        }
+        
+        function rentVehicle(vehicleId) {
+            // Vérifier si l'utilisateur est connecté
+            if (!isUserLoggedIn()) {
+                if (confirm('Vous devez être connecté pour louer un véhicule. Voulez-vous vous connecter maintenant ?')) {
+                    window.location.href = 'login.html';
+                }
+                return;
+            }
+            
+            // Rediriger vers la page de location
+            window.location.href = `location.html?id=${vehicleId}`;
+        }
+        
+        function contactSeller(vehicleId) {
+            if (!isUserLoggedIn()) {
+                if (confirm('Vous devez être connecté pour contacter un vendeur. Voulez-vous vous connecter maintenant ?')) {
+                    window.location.href = 'login.html';
+                }
+                return;
+            }
+            
+            window.location.href = `Contact.html?vehicle=${vehicleId}`;
+        }
+        
+        function isUserLoggedIn() {
+            // Cette fonction devrait vérifier la session PHP
+            // Pour l'instant, on simule avec localStorage
+            return localStorage.getItem('user_id') !== null;
+        }
+    </script>
+</body>
+</html>

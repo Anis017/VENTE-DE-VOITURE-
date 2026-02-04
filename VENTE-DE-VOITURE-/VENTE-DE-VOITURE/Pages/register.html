@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - AutoMarket</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .auth-container {
+            max-width: 600px;
+            margin: 5rem auto 2rem;
+            padding: 2rem;
+        }
+        
+        .auth-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .user-type-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .user-type-card {
+            padding: 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .user-type-card:hover {
+            border-color: var(--primary-color);
+            background-color: var(--light-color);
+        }
+        
+        .user-type-card.active {
+            border-color: var(--primary-color);
+            background-color: #eff6ff;
+        }
+        
+        .user-type-card input[type="radio"] {
+            margin-bottom: 0.5rem;
+        }
+        
+        .user-type-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">🚗</span>
+                <span>AutoMarket</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="../index.html">Accueil</a></li>
+                <li><a href="Catalogue.html">Catalogue</a></li>
+                <li><a href="login.html">Se connecter</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1>Créer un compte</h1>
+                    <p>Rejoignez AutoMarket dès aujourd'hui</p>
+                </div>
+                
+                <div id="messages"></div>
+                
+                <form action="../php/auth.php" method="POST" id="register-form">
+                    <!-- Sélection du type d'utilisateur -->
+                    <div class="form-group">
+                        <label>Type de compte *</label>
+                        <div class="user-type-selection">
+                            <div class="user-type-card active" onclick="selectUserType('client')">
+                                <input type="radio" name="type_utilisateur" value="client" checked id="type-client">
+                                <label for="type-client" style="cursor: pointer;">
+                                    <div class="user-type-icon">👤</div>
+                                    <h3>Client</h3>
+                                    <p style="color: var(--text-light); font-size: 0.9rem;">
+                                        Acheter ou louer des véhicules
+                                    </p>
+                                </label>
+                            </div>
+                            
+                            <div class="user-type-card" onclick="selectUserType('vendeur')">
+                                <input type="radio" name="type_utilisateur" value="vendeur" id="type-vendeur">
+                                <label for="type-vendeur" style="cursor: pointer;">
+                                    <div class="user-type-icon">🏢</div>
+                                    <h3>Vendeur</h3>
+                                    <p style="color: var(--text-light); font-size: 0.9rem;">
+                                        Vendre ou louer des véhicules
+                                    </p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Informations personnelles -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom">Nom *</label>
+                            <input type="text" id="nom" name="nom" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="prenom">Prénom *</label>
+                            <input type="text" id="prenom" name="prenom" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telephone">Téléphone</label>
+                        <input type="tel" id="telephone" name="telephone" class="form-control" placeholder="0612345678">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password">Mot de passe *</label>
+                            <input type="password" id="password" name="password" class="form-control" required minlength="6">
+                            <small style="color: var(--text-light);">Au moins 6 caractères</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirm_password">Confirmer le mot de passe *</label>
+                            <input type="password" id="confirm_password" name="confirm_password" class="form-control" required minlength="6">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                            <input type="checkbox" name="terms" required style="width: auto;">
+                            J'accepte les <a href="#">conditions d'utilisation</a>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" name="register" class="btn btn-primary btn-block">
+                        Créer mon compte
+                    </button>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p>Vous avez déjà un compte ? <a href="login.html"><strong>Se connecter</strong></a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 AutoMarket. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Gestion de la sélection du type d'utilisateur
+        function selectUserType(type) {
+            document.querySelectorAll('.user-type-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById('type-' + type).checked = true;
+        }
+        
+        // Validation du formulaire
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            const email = document.getElementById('email').value;
+            
+            // Vérifier que les mots de passe correspondent
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                vehicleApp.showAlert('Les mots de passe ne correspondent pas', 'error');
+                return false;
+            }
+            
+            // Vérifier la longueur du mot de passe
+            if (password.length < 6) {
+                e.preventDefault();
+                vehicleApp.showAlert('Le mot de passe doit contenir au moins 6 caractères', 'error');
+                return false;
+            }
+            
+            // Vérifier l'email
+            if (!email.includes('@')) {
+                e.preventDefault();
+                vehicleApp.showAlert('Email invalide', 'error');
+                return false;
+            }
+        });
+        
+        // Afficher les messages d'erreur
+        const urlParams = new URLSearchParams(window.location.search);
+        const messagesDiv = document.getElementById('messages');
+        
+        if (urlParams.has('error')) {
+            const errorMsg = urlParams.get('error');
+            messagesDiv.innerHTML = `<div class="alert alert-error">${errorMsg}</div>`;
+        }
+    </script>
+</body>
+</html>

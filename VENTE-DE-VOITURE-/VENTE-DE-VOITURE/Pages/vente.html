@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendre ou Louer un Véhicule - AutoMarket</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">🚗</span>
+                <span>AutoMarket</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="../index.html">Accueil</a></li>
+                <li><a href="Catalogue.html">Catalogue</a></li>
+                <li><a href="vente.html" class="active">Vendre/Louer</a></li>
+                <li><a href="profile.html">Mon Compte</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="section-title">Publier une annonce</h1>
+            
+            <div class="card">
+                <form id="vehicle-form" action="../php/add_vehicle.php" method="POST" enctype="multipart/form-data">
+                    <h2 style="margin-bottom: 2rem;">Informations du véhicule</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="marque">Marque *</label>
+                            <select id="marque" name="marque" class="form-control" required>
+                                <option value="">Sélectionnez une marque</option>
+                                <option value="Peugeot">Peugeot</option>
+                                <option value="Renault">Renault</option>
+                                <option value="Citroën">Citroën</option>
+                                <option value="Tesla">Tesla</option>
+                                <option value="BMW">BMW</option>
+                                <option value="Mercedes">Mercedes</option>
+                                <option value="Audi">Audi</option>
+                                <option value="Volkswagen">Volkswagen</option>
+                                <option value="Toyota">Toyota</option>
+                                <option value="Honda">Honda</option>
+                                <option value="Ford">Ford</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="modele">Modèle *</label>
+                            <input type="text" id="modele" name="modele" class="form-control" required placeholder="Ex: 208, Clio, Golf">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="couleur">Couleur *</label>
+                            <input type="text" id="couleur" name="couleur" class="form-control" required placeholder="Ex: Blanc, Noir, Rouge">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="annee">Année *</label>
+                            <input type="number" id="annee" name="annee" class="form-control" required min="1990" max="2025" placeholder="2022">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="kilometrage">Kilométrage (km) *</label>
+                            <input type="number" id="kilometrage" name="kilometrage" class="form-control" required min="0" placeholder="50000">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vitesse_max">Vitesse maximale (km/h) *</label>
+                            <input type="number" id="vitesse_max" name="vitesse_max" class="form-control" required min="50" max="400" placeholder="180">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="consommation">Consommation (L/100km ou kWh/100km) *</label>
+                            <input type="number" step="0.1" id="consommation" name="consommation" class="form-control" required min="0" max="30" placeholder="5.5">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="type_consommation">Type de carburant *</label>
+                            <select id="type_consommation" name="type_consommation" class="form-control" required>
+                                <option value="">Sélectionnez</option>
+                                <option value="essence">Essence</option>
+                                <option value="diesel">Diesel</option>
+                                <option value="electrique">Électrique</option>
+                                <option value="hybride">Hybride</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" class="form-control" rows="5" placeholder="Décrivez votre véhicule, ses équipements, son état, historique d'entretien, etc."></textarea>
+                    </div>
+                    
+                    <h3 style="margin: 2rem 0 1rem;">Disponibilité et Prix</h3>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                            <input type="checkbox" id="disponible_vente" name="disponible_vente" value="1" style="width: auto;" onchange="togglePriceFields()">
+                            Proposer à la vente
+                        </label>
+                    </div>
+                    
+                    <div class="form-group" id="prix-vente-group" style="display: none;">
+                        <label for="prix_vente">Prix de vente (€) *</label>
+                        <input type="number" id="prix_vente" name="prix_vente" class="form-control" min="0" placeholder="25000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                            <input type="checkbox" id="disponible_location" name="disponible_location" value="1" style="width: auto;" onchange="togglePriceFields()">
+                            Proposer en location
+                        </label>
+                    </div>
+                    
+                    <div class="form-group" id="prix-location-group" style="display: none;">
+                        <label for="prix_location_jour">Prix de location par jour (€) *</label>
+                        <input type="number" id="prix_location_jour" name="prix_location_jour" class="form-control" min="0" placeholder="50">
+                    </div>
+                    
+                    <h3 style="margin: 2rem 0 1rem;">Photo du véhicule</h3>
+                    
+                    <div class="form-group">
+                        <label for="vehicle-image">Image principale</label>
+                        <input type="file" id="vehicle-image" name="vehicle-image" class="form-control" accept="image/*">
+                        <img id="image-preview" src="" alt="Aperçu" style="display: none; margin-top: 1rem; max-width: 300px; border-radius: 10px;">
+                    </div>
+                    
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                        <button type="submit" class="btn btn-primary">Publier l'annonce</button>
+                        <button type="reset" class="btn btn-outline">Réinitialiser</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 AutoMarket. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Afficher/masquer les champs de prix selon les cases cochées
+        function togglePriceFields() {
+            const venteChecked = document.getElementById('disponible_vente').checked;
+            const locationChecked = document.getElementById('disponible_location').checked;
+            
+            document.getElementById('prix-vente-group').style.display = venteChecked ? 'block' : 'none';
+            document.getElementById('prix-location-group').style.display = locationChecked ? 'block' : 'none';
+            
+            // Rendre les champs obligatoires ou non
+            document.getElementById('prix_vente').required = venteChecked;
+            document.getElementById('prix_location_jour').required = locationChecked;
+        }
+        
+        // Aperçu de l'image
+        document.getElementById('vehicle-image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('image-preview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Validation du formulaire
+        document.getElementById('vehicle-form').addEventListener('submit', function(e) {
+            const venteChecked = document.getElementById('disponible_vente').checked;
+            const locationChecked = document.getElementById('disponible_location').checked;
+            
+            if (!venteChecked && !locationChecked) {
+                e.preventDefault();
+                vehicleApp.showAlert('Vous devez cocher au moins une option (vente ou location)', 'error');
+                return false;
+            }
+            
+            // Vérifier si l'utilisateur est connecté et est un vendeur
+            // Cette vérification devrait normalement être faite côté serveur
+            if (!confirm('Êtes-vous sûr de vouloir publier cette annonce ?')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

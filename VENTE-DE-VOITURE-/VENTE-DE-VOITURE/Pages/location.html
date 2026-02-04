@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location de Véhicule - AutoMarket</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">
+                <span class="logo-icon">🚗</span>
+                <span>AutoMarket</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="../index.html">Accueil</a></li>
+                <li><a href="Catalogue.html">Catalogue</a></li>
+                <li><a href="profile.html">Mon Compte</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="section-title">Réserver une location</h1>
+            
+            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem;">
+                <div class="card">
+                    <h2>Informations de location</h2>
+                    <form id="rental-form" action="../php/process_rental.php" method="POST">
+                        <input type="hidden" name="vehicle_id" id="vehicle-id">
+                        
+                        <div class="form-group">
+                            <label for="start-date">Date de début *</label>
+                            <input type="date" id="start-date" name="start_date" class="form-control" required min="">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="end-date">Date de fin *</label>
+                            <input type="date" id="end-date" name="end_date" class="form-control" required min="">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="pickup-location">Lieu de récupération *</label>
+                            <input type="text" id="pickup-location" name="pickup_location" class="form-control" required placeholder="Adresse de récupération">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="driver-license">Permis de conduire *</label>
+                            <input type="text" id="driver-license" name="driver_license" class="form-control" required placeholder="Numéro de permis">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                                <input type="checkbox" name="insurance" style="width: auto;">
+                                Souscrire à l'assurance tous risques (+15€/jour)
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">Confirmer la réservation</button>
+                    </form>
+                </div>
+                
+                <div>
+                    <div class="card" id="vehicle-summary">
+                        <div class="loading">Chargement...</div>
+                    </div>
+                    
+                    <div class="card mt-2">
+                        <h3>Récapitulatif du prix</h3>
+                        <div style="margin: 1.5rem 0;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Prix par jour:</span>
+                                <strong id="daily-price">--</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Nombre de jours:</span>
+                                <strong id="rental-days">0</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                <span>Assurance:</span>
+                                <strong id="insurance-cost">0€</strong>
+                            </div>
+                            <hr>
+                            <div style="display: flex; justify-content: space-between; font-size: 1.3rem;">
+                                <span><strong>Total:</strong></span>
+                                <strong style="color: var(--primary-color);" id="total-price">0€</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 AutoMarket. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const vehicleId = urlParams.get('id');
+        let dailyRate = 0;
+        
+        if (!vehicleId) {
+            window.location.href = 'Catalogue.html';
+        }
+        
+        document.getElementById('vehicle-id').value = vehicleId;
+        
+        // Définir la date minimale à aujourd'hui
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('start-date').min = today;
+        document.getElementById('end-date').min = today;
+        
+        // Charger les informations du véhicule
+        fetch(`../php/get_vehicles.php?id=${vehicleId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.vehicle) {
+                    const vehicle = data.vehicle;
+                    dailyRate = parseFloat(vehicle.prix_location_jour);
+                    
+                    document.getElementById('vehicle-summary').innerHTML = `
+                        <h3>Véhicule sélectionné</h3>
+                        <img src="${vehicle.image_principale || '../images/default-car.jpg'}" 
+                             style="width: 100%; border-radius: 10px; margin: 1rem 0;">
+                        <h2>${vehicle.marque} ${vehicle.modele}</h2>
+                        <p>${vehicle.annee} • ${vehicle.kilometrage.toLocaleString()} km</p>
+                    `;
+                    
+                    document.getElementById('daily-price').textContent = vehicleApp.formatPrice(dailyRate);
+                    document.getElementById('daily-rate').value = dailyRate;
+                }
+            });
+        
+        // Calcul du prix
+        function calculatePrice() {
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            const insurance = document.querySelector('input[name="insurance"]').checked;
+            
+            if (startDate && endDate) {
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+                
+                if (days > 0) {
+                    const rentalCost = days * dailyRate;
+                    const insuranceCost = insurance ? days * 15 : 0;
+                    const total = rentalCost + insuranceCost;
+                    
+                    document.getElementById('rental-days').textContent = days;
+                    document.getElementById('insurance-cost').textContent = vehicleApp.formatPrice(insuranceCost);
+                    document.getElementById('total-price').textContent = vehicleApp.formatPrice(total);
+                } else {
+                    document.getElementById('rental-days').textContent = '0';
+                    document.getElementById('insurance-cost').textContent = '0€';
+                    document.getElementById('total-price').textContent = '0€';
+                }
+            }
+        }
+        
+        document.getElementById('start-date').addEventListener('change', calculatePrice);
+        document.getElementById('end-date').addEventListener('change', calculatePrice);
+        document.querySelector('input[name="insurance"]').addEventListener('change', calculatePrice);
+        
+        document.getElementById('rental-form').addEventListener('submit', function(e) {
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            
+            if (new Date(endDate) <= new Date(startDate)) {
+                e.preventDefault();
+                vehicleApp.showAlert('La date de fin doit être après la date de début', 'error');
+                return false;
+            }
+            
+            if (!confirm('Confirmer la réservation ?')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>
